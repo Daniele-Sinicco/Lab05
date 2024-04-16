@@ -5,8 +5,9 @@ from mysql.connector import errorcode
 def get_connection() -> mysql.connector.connection:
     try:
         cnx = mysql.connector.connect(
-            option_files='./database/connector.cnf'
+            option_files='database/connector.cnf'
         )
+        return cnx
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Something is wrong with your user name or password")
@@ -21,3 +22,11 @@ def get_connection() -> mysql.connector.connection:
 
 class DBConnect:
     pass
+
+if __name__ == '__main__':
+    cnx = get_connection()
+    cursor = cnx.cursor()
+    query = """SELECT * FROM corso"""
+    cursor.execute(query)
+    for(codins, crediti, nome, pd) in cursor:
+        print(codins, crediti, nome, pd)
